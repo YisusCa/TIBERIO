@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Metatransacciones</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+</head>
+<body>
+    <button id="mintButton" style="display:none;" onclick="mintToken()">Mint Token</button>
+    <script>
+        let web3;
+
+        async function connectMetaMask() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    await ethereum.request({ method: 'eth_requestAccounts' });
+                    web3 = new Web3(window.ethereum);
+                    console.log('MetaMask conectado.');
+                    document.getElementById('mintButton').style.display = 'block'; // Show the mintButton after successful connection
+                } catch (error) {
+                    console.error('Error al conectar con MetaMask:', error);
+                }
+            } else {
+                console.log('MetaMask no está instalado.');
+            }
+        }
+
+        async function mintToken() {
+            // Aquí iría la lógica para preparar y firmar la metatransacción
+            // y luego enviarla a un relayer. Este código es solo un marcador de posición.
+            console.log('Función mintToken llamada. Implementar lógica de metatransacción aquí.');
+        }
+
+        connectMetaMask();
+    </script>
+</body>
+</html>
+    </script>
+</body>
+</html>
+    <script>
+        async function connectMetaMask() {
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      await ethereum.request({ method: 'eth_requestAccounts' });
+      web3 = new Web3(window.ethereum);
+      console.log('MetaMask conectado.');
+      sendCryptoButton.style.display = 'block';
+      document.getElementById('mintButton').style.display = 'block'; // Show the mintButton after successful connection
+    } catch (error) {
+      console.error('Error al conectar con MetaMask:', error);
+    }
+  } else {
+    console.log('MetaMask no está instalado.');
+  }
+}
+async function mintToken(ethereum) {
+  for (const key in object) {
+    if (Object.hasOwnProperty.call(object, key)) {
+      const element = object[key];
+    }
+  }
+  const accounts = await web3.eth.getAccounts();
+  if (accounts.length === 0) {
+    console.error('No se encontraron cuentas conectadas.');
+    return;
+  }
+
+  const transactionParameters = {
+    to: '0x8bdE496623157d0527339c7E6c5725F023ade5cf', // Reemplaza con la dirección destino
+    from: accounts[0],
+    value: web3.utils.toWei('0.01', 'ether'),
+  };
+
+    connectButton.addEventListener('click', connectMetaMask);
+    sendCryptoButton.addEventListener('click', sendCrypto);
+  </script>
+</body>
+</html>
+<script>
+    let web3;
+    let contract;
+
+    async function connectMetaMask() {
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                await ethereum.request({ method: 'eth_requestAccounts' });
+                web3 = new Web3(window.ethereum);
+                console.log('MetaMask conectado.');
+                document.getElementById('mintButton').style.display = 'block'; // Show the mintButton after successful connection
+
+                // Inicializar el contrato aquí después de conectar MetaMask
+                const contractABI = [debca309fc704ab5a6cc2443031eb743];
+                const contractAddress = '0x881D40237659C251811CEC9c364ef91dC08D300C';
+                contract = new web3.eth.Contract(contractABI, contractAddress);
+            } catch (error) {
+                console.error('Error al conectar con MetaMask:', error);
+            }
+        } else {
+            console.log('MetaMask no está instalado.');
+        }
+    }
+
+    async function mintToken() {
+    if (!contract) {
+        console.error('El contrato no está definido.');
+        return;
+    }
+
+    try {
+        // Datos de la transacción que quieres firmar
+        const functionAbi = contract.methods.mint().encodeABI();
+        const transactionData = {
+            to: contract.options.address,
+            data: functionAbi,
+            // Puedes incluir otros campos necesarios para la transacción
+        };
+
+        // Obtener el nonce del usuario (puede ser diferente del nonce de la transacción)
+        const userNonce = await web3.eth.getTransactionCount(ethereum.selectedAddress, 'latest');
+
+        // Firmar los datos de la transacción
+        const signature = await web3.eth.sign(web3.utils.keccak256(transactionData), ethereum.selectedAddress);
+
+        // Enviar la transacción firmada al relayer
+        const response = await fetch('URL_DEL_RELAYER', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                transactionData,
+                signature,
+                userNonce,
+                // Incluir cualquier otro dato requerido por el relayer
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al enviar la transacción al relayer');
+        }
+
+        const responseData = await response.json();
+        console.log('Transacción enviada a través del relayer:', responseData);
+    } catch (error) {
+        console.error('Error al mintear el token con metatransacción:', error);
+    }
+}
